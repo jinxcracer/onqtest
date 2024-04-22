@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONQ Tech</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffeb3b;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h3 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #999;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .role-options {
+            margin-top: 20px;
+        }
+
+        .role-options ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .role-options li {
+            margin-bottom: 10px;
+        }
+
+        .role-options li label {
+            margin-left: 5px;
+        }
+
+        #registrarForm,
+        #cashierForm {
+            display: none;
+        }
+
+        #registrarForm .container,
+        #cashierForm .container {
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        #registrarForm h3,
+        #cashierForm h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="onqTechContent" class="container">
+        <h3>ONQ Tech</h3>
+        <form id="form1" onsubmit="showChoices(event)">
+            <label for="userType">Select User Type:</label>
+            <select id="userType" onchange="toggleFields()">
+                <option value="student">Student</option>
+                <option value="parent">Parent / Guardian</option>
+            </select>
+
+            <div id="studentFields">
+            </div>
+
+            <div id="parentFields">
+            </div>
+
+            <button type="submit">Submit</button>
+
+            <div class="role-options" id="roleOptions">
+                <label for="role">Please select your role:</label>
+                <ul>
+                    <li><input type="radio" id="cashier" name="role" value="Cashier"><label for="cashier">Cashier</label></li>
+                    <li><input type="radio" id="registrar" name="role" value="Registrar"><label for="registrar">Registrar</label></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+
+    <div id="registrarForm" class="container">
+        <h3>Registrar Form</h3>
+        <form id="registrarFormContent" onsubmit="submitRegistrarForm(event)">
+            <label for="documentType">Document Type:</label>
+            <select id="documentType" name="documentType">
+                <option value="permit">Permit</option>
+                <option value="clearance">Clearance</option>
+                <option value="schoolForms">School Forms</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="back-button">
+            <button onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <div id="cashierForm" class="container">
+        <h3>Cashier Form</h3>
+        <form id="cashierFormContent" onsubmit="submitCashierForm(event)">
+            <label for="paymentType">Payment Type:</label>
+            <select id="paymentType" name="paymentType">
+                <option value="fullPayment">Full Payment</option>
+                <option value="installment">Installment</option>
+            </select>
+            <label for="year">Year:</label>
+            <select id="year" name="year">
+                <option value="firstYear">First Year</option>
+                <option value="secondYear">Second Year</option>
+                <option value="thirdYear">Third Year</option>
+                <option value="fourthYear">Fourth Year</option>
+            </select>
+            <label for="course">Course:</label>
+            <select id="course" name="course">
+                <option value="BSIT">BSIT</option>
+                <option value="BSTM">BSTM</option>
+                <option value="BSBA">BSBA</option>
+                <option value="BSCPE">BSCPE</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="back-button">
+            <button onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleFields() {
+            var userType = document.getElementById("userType").value;
+            var studentFields = document.getElementById("studentFields");
+            var parentFields = document.getElementById("parentFields");
+            var registrarForm = document.getElementById("registrarForm");
+            var cashierForm = document.getElementById("cashierForm");
+
+            if (userType === "student") {
+                studentFields.style.display = "block";
+                parentFields.style.display = "none";
+                registrarForm.style.display = "none";
+                cashierForm.style.display = "none";
+            } else if (userType === "parent") {
+                studentFields.style.display = "none";
+                parentFields.style.display = "block";
+                registrarForm.style.display = "none";
+                cashierForm.style.display = "none";
+            }
+        }
+
+        function showChoices(event) {
+            event.preventDefault();
+            var userType = document.getElementById("userType").value;
+            var selectedRole = document.querySelector('input[name="role"]:checked');
+            var registrarForm = document.getElementById("registrarForm");
+            var cashierForm = document.getElementById("cashierForm");
+
+            if (selectedRole) {
+                var role = selectedRole.value;
+                if (role === "Registrar") {
+                    registrarForm.style.display = "block";
+                    document.getElementById("onqTechContent").style.display = "none";
+                    cashierForm.style.display = "none";
+                } else if (role === "Cashier") {
+                    cashierForm.style.display = "block";
+                    document.getElementById("onqTechContent").style.display = "none";
+                    registrarForm.style.display = "none";
+                } else {
+                    registrarForm.style.display = "none";
+                    cashierForm.style.display = "none";
+                    document.getElementById("onqTechContent").style.display = "block";
+                    var choices = "User Type: " + userType + "<br>";
+                    if (userType === "parent") {
+                        var parentFirstName = document.getElementById("parentFirstName").value;
+                        var parentLastName = document.getElementById("parentLastName").value;
+                        choices += "Parent First Name: " + parentFirstName + "<br>";
+                        choices += "Parent Last Name: " + parentLastName + "<br>";
+                    }
+                    choices += "Selected Role: " + role + "<br>";
+                    var popup = window.open('', '_blank', 'width=400,height=300,scrollbars=yes,resizable=yes');
+                    popup.document.write(choices);
+                    popup.focus();
+                }
+            } else {
+                alert("Please select a role!");
+            }
+        }
+
+        function submitRegistrarForm(event) {
+            event.preventDefault();
+        }
+
+        function submitCashierForm(event) {
+            event.preventDefault();
+            var paymentType = document.getElementById("paymentType").value;
+            var year = document.getElementById("year").value;
+            var course = document.getElementById("course").value;
+            console.log("Payment Type:", paymentType);
+            console.log("Year:", year);
+            console.log("Course:", course);
+        }
+
+        function goBack() {
+            var onqTechContent = document.getElementById("onqTechContent");
+            var registrarForm = document.getElementById("registrarForm");
+            var cashierForm = document.getElementById("cashierForm");
+
+            onqTechContent.style.display = "block";
+            registrarForm.style.display = "none";
+            cashierForm.style.display = "none";
+        }
+    </script>
+</body>
+</html>
